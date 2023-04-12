@@ -1,0 +1,82 @@
+/* Part 1- Extrack The Data */
+SELECT *
+  FROM facts
+limit 5;
+
+/* Part 2- Summary Statistics
+Write a single query that returns the following:
+
+Minimum population
+Maximum population
+Minimum population growth
+Maximum population growth */
+SELECT min(population), max(population),
+    min(population_growth),max(population_growth)
+  FROM facts
+  limit 10;
+
+-- Part 3 - 5/8 Exploring Outliers
+
+/* 1.Write a query that returns the countries with the minimum population.
+   2. Write a query that returns the countries with the maximum population.*/
+
+SELECT population, name
+FROM facts
+WHERE population = (SELECT MAX(population) FROM facts)
+  OR population = (SELECT MIN(population) FROM facts)
+LIMIT 10;
+
+-- Part 3 - 6 of 8 · Exploring Average Population and Area
+-- Get an Highest Populations And Lowest Populations
+/*1.Recompute the summary statistics you found earlier while excluding the row for the whole world. Include the following:
+
+Minimum population
+Maximum population
+Minimum population growth
+Maximum population growth 
+2. In a different code cell, calculate the average value for the following columns:
+
+population
+*/
+SELECT MIN(population) AS min_pop, 
+       MAX(population) AS max_pop,
+       MIN(population_growth) AS min_pop_growth,
+       MAX(population_growth) AS max_pop_growth
+    FROM facts
+    WHERE name != 'World';
+
+select avg(population),
+      avg(area)
+      from facts
+      where name != 'Wolrd';
+
+---- Part 3 - 7/8 Exploring Outliers
+/*Write a query that finds all countries meeting both of the following criteria:
+The population is above average.
+The area is below average.*/
+SELECT name, population, area
+    FROM facts
+    WHERE population > (SELECT AVG(population)
+                            FROM facts
+                            WHERE name != 'World')
+    AND area < (SELECT AVG(area) 
+                            FROM facts
+                            WHERE name != 'World')
+    AND name != 'World';
+
+---
+
+
+
+
+
+--Others
+/* i became more intersted in data sections,so we helds an answer projects'*/
+SELECT name,death_rate,birth_rate
+FROM facts
+WHERE death_rate > birth_rate
+GROUP BY  population
+limit 10;
+
+
+
